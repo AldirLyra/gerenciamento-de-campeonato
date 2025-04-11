@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gerenciamento-de-campeonato", "gerenciamento-de-campeonato\gerenciamento-de-campeonato.csproj", "{FE1C752E-7FDB-47D4-BFF8-FD7412F3623B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE1C752E-7FDB-47D4-BFF8-FD7412F3623B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE1C752E-7FDB-47D4-BFF8-FD7412F3623B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE1C752E-7FDB-47D4-BFF8-FD7412F3623B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE1C752E-7FDB-47D4-BFF8-FD7412F3623B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E89E3012-B66A-4878-BE96-0CCD9C0364D2}
+	EndGlobalSection
+EndGlobal
