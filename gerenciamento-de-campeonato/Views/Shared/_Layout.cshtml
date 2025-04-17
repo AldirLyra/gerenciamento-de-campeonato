@@ -1,26 +1,32 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Meu Aplicativo ASP.NET</title>
+    <title>@ViewBag.Title - Liga Tabajara de Futebol 2025</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-success">
         <div class="container">
-            @Html.ActionLink("Nome do aplicativo", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Liga Tabajara de Futebol", "Index", "Home", new { area = "" }, new { @class = "navbar-brand custom-title" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Página Inicial", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Sobre", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contato", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li><a href="/Home/Index" class="nav-link"><i class="fas fa-home"></i> Pagina Inicial</a></li>
+                    @*<li><a href="/Home/About" class="nav-link"><i class="fas fa-info-circle"></i> Sobre</a></li>
+                    <li><a href="/Home/Contact" class="nav-link"><i class="fas fa-envelope"></i> Contato</a></li>*@
+                    <li><a href="/Jogador/Index" class="nav-link"><i class="fas fa-user"></i> Jogador</a></li>
+                    <li><a href="/ComissaoTecnica/Index" class="nav-link"><i class="fas fa-users"></i> Comissao Tecnica</a></li>
+                    <li><a href="/Liga/Index" class="nav-link"><i class="fas fa-trophy"></i> Liga</a></li>
+                    <li><a href="/Time/Index" class="nav-link"><i class="fas fa-futbol"></i> Time</a></li>
                 </ul>
             </div>
         </div>
@@ -29,7 +35,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Meu Aplicativo ASP.NET</p>
+            <p>&copy; @DateTime.Now.Year - Liga Tabajara de Futebol 2025</p>
         </footer>
     </div>
 

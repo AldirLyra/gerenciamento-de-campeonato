@@ -1,0 +1,101 @@
+﻿@model IEnumerable<gerenciamento_de_campeonato.Models.Time>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Times</h2>
+
+<br>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-sm btn-success" aria-label="Criar novo item" title="Criar Novo">
+        <i class="fas fa-plus"></i> Criar Novo Time
+    </a>
+</p>
+
+<br>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cidade)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AnoFundacao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estadio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CapacidadeEstadio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CorPrimaria)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CorSecundaria)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Liga.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ativo)
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cidade)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AnoFundacao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estadio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CapacidadeEstadio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CorPrimaria)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CorSecundaria)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Liga.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Ativo)
+        </td>
+
+        <td>
+            <a href="@Url.Action("Edit", new { id = item.Id })" class="text-warning" title="Editar">
+                <i class="fas fa-edit"></i>
+            </a>
+            <a href="@Url.Action("Details", new { id = item.Id })" class="text-info" title="Detalhes">
+                <i class="fas fa-info-circle"></i>
+            </a>
+            <a href="@Url.Action("Delete", new { id = item.Id })" class="text-danger" title="Excluir">
+                <i class="fas fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,95 @@
+﻿@model gerenciamento_de_campeonato.Models.Tabela
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Tabela</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Liga.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Liga.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Time.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pontos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pontos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Jogos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Jogos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vitorias)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vitorias)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Empates)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Empates)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Derrotas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Derrotas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GolsPro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GolsPro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GolsContra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GolsContra)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-outline-success" title="Editar">
+        </i>
+        Editar
+    </a>
+    <a href="@Url.Action("Index")" class="btn btn-outline-primary" aria-label="Voltar" title="Voltar">
+        Voltar
+    </a>
+</p>

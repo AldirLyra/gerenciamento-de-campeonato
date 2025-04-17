@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -17,11 +19,18 @@ namespace gerenciamento_de_campeonato.Models
 
 	public class ComissaoTecnica
 	{
-		public int ID { get; set; }
+        public int Id { get; set; }
+        [Required]
         public string Nome { get; set; }
-		public virtual Cargo Cargo { get; set; }
-        public DateTime DataNascimento { get; set; }
-        public virtual ICollection<Time> Time { get; set; }
+        public Cargo Cargo { get; set; }
 
+        [DataType(DataType.Date)]
+        [Display(Name = "Data de Nascimento")]
+        public DateTime DataNascimento { get; set; }
+
+        [Display(Name = "Time")]
+        public int TimeId { get; set; }
+
+        public virtual Time Time { get; set; }
     }
 }

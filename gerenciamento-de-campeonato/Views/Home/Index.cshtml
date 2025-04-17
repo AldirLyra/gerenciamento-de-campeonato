@@ -1,33 +1,115 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home - Liga Tabajara 2025";
 }
-
 <main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
+    <div class="loading-overlay" id="loading">
+        <div class="spinner"></div>
+        <p style="color: white; margin-left: 10px;">Simulando campeonato...</p>
+    </div>
+    <section class="row" aria-labelledby="introTitle">
+        <h1 id="title">Bem-vindo a Liga Tabajara 2025</h1>
+        <p class="lead">A Liga Tabajara 2025 reúne os melhores times de futebol para disputar um campeonato cheio de emoção, com jogos, estatísticas e muito mais!</p>
     </section>
 
     <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
+        <section class="col-md-4" aria-labelledby="sobreLigaTitle">
+            <h2 id="sobreLigaTitle">Sobre a Liga</h2>
             <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
+                A Liga Tabajara é um campeonato que promove o futebol de alto nível, reunindo equipes de diversas regiões para disputar o título de campeão. O campeonato conta com 20 times e 38 rodadas.
             </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+            <p><a class="btn btn-outline-success" href="/Liga">Saiba mais sobre a Liga &raquo;</a></p>
         </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+
+        <section class="col-md-4" aria-labelledby="timesParticipantesTitle">
+            <h2 id="timesParticipantesTitle">Times Participantes</h2>
+            <p>Conheça os 20 times que estão competindo pelo título de campeão da Liga Tabajara 2025. Cada time traz uma história de superação e dedicação.</p>
+            <p><a class="btn btn-outline-success" href="/Time">Veja os Times &raquo;</a></p>
         </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+
+        <section class="col-md-4" aria-labelledby="simularTitle">
+            <h2 id="simularTitle">Acompanhe agora o campeonato da Liga Tabajara!</h2>
+            <p>Inicie a simulação do campeonato e acompanhe as estatísticas mais relevantes, como a tabela de classificação, resultados dos jogos e artilheiros!</p>
+            <p>
+                <button class="btn btn-outline-success" id="iniciarSimulacaoBtn" data-liga-id="1">Iniciar Simulação &raquo;</button>
+            </p>
         </section>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        $(document).ready(function () {
+            $("#iniciarSimulacaoBtn").click(function () {
+                var ligaId = $(this).data("liga-id");
+                var $loading = $("#loading");
+
+                if ($loading.length) {
+                    $loading.css("display", "flex");
+
+                } else {
+                    console.error("Elemento #loading não encontrado.");
+                }
+
+                $.ajax({
+                    url: '@Url.Action("IniciarSimulacao", "Estatistica")',
+                    type: 'POST',
+                    data: { ligaId: ligaId },
+                    success: function (response) {
+                        console.log("AJAX sucesso: ", response);
+                        setTimeout(function () {
+                            $loading.hide();
+                            if (response.success) {
+                                window.location.href = response.redirectUrl;
+                            } else {
+                                alert(response.message);
+                            }
+                        }, 500);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX erro: ", status, error);
+                        $loading.hide();
+                        alert("Erro ao iniciar simulação: " + error);
+                    }
+                });
+            });
+        });
+        </script>
     </div>
 </main>
+
+<style>
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .spinner {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #004aad;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .alert {
+        margin-bottom: 1rem;
+    }
+</style>

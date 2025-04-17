@@ -1,0 +1,197 @@
+﻿@model gerenciamento_de_campeonato.Controllers.EstatisticaViewModel
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estatísticas - Liga Tabajara</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .header {
+            background-color: green;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .container {
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #004aad;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .accordion-button {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loading">
+        <div class="spinner"></div>
+    </div>
+    <div class="header">
+        <h1>Estatísticas - Liga Tabajara</h1>
+    </div>
+    <div class="container">
+        <h2>Tabela de Classificação</h2>
+
+        <p>
+            @using (Html.BeginForm("Index", "Estatistica", new { ligaId = Model.LigaId }, FormMethod.Get))
+            {
+                <div class="filter-form">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="jogos" class="form-label">Jogos Disputados</label>
+                            @Html.TextBox("jogos", null, new { @class = "form-control", type = "number", min = "0", max = "38", placeholder = "Ex.: 38" })
+                        </div>
+                        <div class="col-md-6">
+                            <label for="estadio" class="form-label">Estádio</label>
+                            @Html.DropDownList("estadio", ViewBag.estadio as SelectList, "All", new { @class = "form-select" })
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <input type="submit" value="Filtrar" class="btn btn-secondary" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </p>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Pontos</th>
+                    <th>Jogos</th>
+                    <th>Vitórias</th>
+                    <th>Empates</th>
+                    <th>Derrotas</th>
+                    <th>Gols Pró</th>
+                    <th>Gols Contra</th>
+                    <th>Saldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Classificacao)
+                {
+                    <tr>
+                        <td>@item.Time.Nome</td>
+                        <td>@item.Pontos</td>
+                        <td>@item.Jogos</td>
+                        <td>@item.Vitorias</td>
+                        <td>@item.Empates</td>
+                        <td>@item.Derrotas</td>
+                        <td>@item.GolsPro</td>
+                        <td>@item.GolsContra</td>
+                        <td>@(item.GolsPro - item.GolsContra)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h2>Artilheiros</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Jogador</th>
+                    <th>Time</th>
+                    <th>Gols</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var artilheiro in Model.Artilheiros.Take(10))
+                {
+                    <tr>
+                        <td>@artilheiro.NomeJogador</td>
+                        <td>@artilheiro.Time</td>
+                        <td>@artilheiro.Gols</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h2>Resultados das Partidas</h2>
+        <div class="accordion" id="partidasAccordion">
+            @for (int rodada = 1; rodada <= 38; rodada++)
+            {
+                var partidasRodada = Model.Partidas.Where(p => p.Rodada == rodada).ToList();
+                if (partidasRodada.Any())
+                {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingRodada@(rodada)">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRodada@(rodada)" aria-expanded="false" aria-controls="collapseRodada@(rodada)">
+                                Rodada @(rodada)
+                            </button>
+                        </h2>
+                        <div id="collapseRodada@(rodada)" class="accordion-collapse collapse" aria-labelledby="headingRodada@(rodada)" data-bs-parent="#partidasAccordion">
+                            <div class="accordion-body">
+                                @foreach (var partida in partidasRodada)
+                                {
+                                    <div class="card mb-2">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@partida.TimeCasa.Nome @partida.GolsTimeCasa x @partida.GolsTimeVisitante @partida.TimeVisitante.Nome</h5>
+                                            <p class="card-text"><strong>Data:</strong> @partida.DataPartida.ToString("dd/MM/yyyy") | <strong>Estádio:</strong> @partida.TimeCasa.Estadio</p>
+                                            @if (partida.Gols.Any())
+                                            {
+                                                <p class="card-text"><strong>Gols:</strong></p>
+                                                <ul>
+                                                    @foreach (var gol in partida.Gols)
+                                                    {
+                                                        <li>@gol.Jogador.Nome (@gol.Minuto' - @gol.Jogador.Time.Nome)</li>
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <p class="card-text">Nenhum gol registrado.</p>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

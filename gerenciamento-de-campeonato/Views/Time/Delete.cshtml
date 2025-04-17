@@ -1,0 +1,106 @@
+﻿@model gerenciamento_de_campeonato.Models.Time
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Tem certeza que deseja deletar o registro?</h3>
+<div>
+    <h4>Time</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Liga.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Liga.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cidade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cidade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnoFundacao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnoFundacao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estadio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estadio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CapacidadeEstadio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CapacidadeEstadio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CorPrimaria)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CorPrimaria)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CorSecundaria)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CorSecundaria)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ativo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ativo)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-outline-danger" /> 
+            <a href="@Url.Action("Index")" class="btn btn-outline-primary" aria-label="Voltar" title="Voltar">
+                Voltar
+            </a>
+        </div>
+    }
+</div>

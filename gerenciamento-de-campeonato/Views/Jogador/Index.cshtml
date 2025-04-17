@@ -1,0 +1,119 @@
+﻿@model IEnumerable<gerenciamento_de_campeonato.Models.Jogador>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Jogadores</h2>
+
+<br>
+
+@*filtros*@
+<p>
+    @using (Html.BeginForm("Index", "Jogador", FormMethod.Get))
+    {
+        <div class="filter-form">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="searchString" class="form-label">Nome</label>
+                    @Html.TextBox("searchString", null, new { @class = "form-control", placeholder = "Digite o nome" })
+                </div>
+                <div class="col-md-4">
+                    <label for="posicao" class="form-label">Posição</label>
+                    @Html.DropDownList("posicao", ViewBag.posicao as SelectList, "All", new { @class = "form-select" })
+                </div>
+                <div class="col-md-4">
+                    <label for="pePreferido" class="form-label">Pé Preferido</label>
+                    @Html.DropDownList("pePreferido", ViewBag.pePreferido as SelectList, "All", new { @class = "form-select" })
+                </div>
+                <div class="col-md-12 mt-3">
+                    <input type="submit" value="Filtrar" class="btn btn-secondary" />
+                </div>
+            </div>
+        </div>
+    }
+</p>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-sm btn-success" aria-label="Criar novo item" title="Criar Novo">
+        <i class="fas fa-plus"></i> Criar Novo Jogador
+    </a>
+</p>
+
+<br>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Time.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DataNascimento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nacionalidade)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Posicao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumeroCamisa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Altura)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Peso)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PePreferido)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Time.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataNascimento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nacionalidade)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Posicao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumeroCamisa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Altura)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Peso)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PePreferido)
+        </td>
+        <td>
+            <a href="@Url.Action("Edit", new { id = item.Id })" class="text-warning" title="Editar">
+                <i class="fas fa-edit"></i>
+            </a>
+            <a href="@Url.Action("Details", new { id = item.Id })" class="text-info" title="Detalhes">
+                <i class="fas fa-info-circle"></i>
+            </a>
+            <a href="@Url.Action("Delete", new { id = item.Id })" class="text-danger" title="Excluir">
+                <i class="fas fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,3 +1,5 @@
+using gerenciamento_de_campeonato.Models;
+using gerenciamento_de_campeonato.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,7 @@ namespace gerenciamento_de_campeonato
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            
         }
     }
 }

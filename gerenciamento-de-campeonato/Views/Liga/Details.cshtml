@@ -1,0 +1,39 @@
+﻿@model gerenciamento_de_campeonato.Models.Liga
+
+@{
+    ViewBag.Title = "Detalhes";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Liga</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ativa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ativa)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-outline-success" title="Editar">
+        </i>
+        Editar
+    </a>
+    <a href="@Url.Action("Index")" class="btn btn-outline-primary" aria-label="Voltar" title="Voltar">
+        Voltar
+    </a>
+</p>

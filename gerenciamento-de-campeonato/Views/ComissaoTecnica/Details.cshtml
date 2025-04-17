@@ -1,0 +1,54 @@
+﻿@model gerenciamento_de_campeonato.Models.ComissaoTecnica
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>ComissaoTecnica</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Time.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cargo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cargo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataNascimento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataNascimento)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-outline-success" title="Editar"></i>
+        Editar
+    </a>
+    <a href="@Url.Action("Index")" class="btn btn-outline-primary" aria-label="Voltar" title="Voltar">
+        Voltar
+    </a>
+</p>
