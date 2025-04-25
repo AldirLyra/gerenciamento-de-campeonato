@@ -32,7 +32,7 @@ namespace gerenciamento_de_campeonato.Controllers
             }
         }
 
-        public ActionResult Index(string jogos, string estadio, int ligaId = 1)
+        public ActionResult Index(string partidaId, string estadio, int ligaId = 1)
         {
             try
             {
@@ -64,25 +64,31 @@ namespace gerenciamento_de_campeonato.Controllers
                     });
                 }
 
-                //filtros
-                var estadioList = _context.Tabelas
-                    .Where(t => t.LigaId == ligaId && t.Time != null)
-                    .Select(t => t.Time.Estadio)
+                var estadioList = _context.Partidas
+                    .Where(p => p.LigaId == ligaId && p.TimeCasa != null)
+                    .Select(p => p.TimeCasa.Estadio)
                     .Distinct()
                     .OrderBy(e => e)
                     .ToList();
 
+                estadioList.Insert(0, "All");
                 ViewBag.estadio = new SelectList(estadioList, estadio ?? "All");
 
-                var classificacao = _ligaService.GetClassificacao(ligaId) ?? new List<Tabela>();
+                var partidas = _context.Partidas
+                    .Where(p => p.LigaId == ligaId)
+                    .OrderBy(p => p.Rodada)
+                    .ToList() ?? new List<Partida>();
 
-                if (!string.IsNullOrEmpty(jogos) && int.TryParse(jogos, out int jogosFiltro))
+                if (!string.IsNullOrEmpty(partidaId) && int.TryParse(partidaId, out int partidaIdFiltro))
                 {
-                    classificacao = classificacao.Where(t => t.Jogos == jogosFiltro).ToList();
+                    partidas = partidas.Where(p => p.Id == partidaIdFiltro).ToList();
+                    Debug.WriteLine($"EstatisticaController.Index: Aplicado filtro partidaId={partidaIdFiltro}, Resultados={partidas.Count}");
                 }
+
                 if (!string.IsNullOrEmpty(estadio) && estadio != "All")
                 {
-                    classificacao = classificacao.Where(t => t.Time != null && t.Time.Estadio == estadio).ToList();
+                    partidas = partidas.Where(p => p.TimeCasa != null && p.TimeCasa.Estadio == estadio).ToList();
+                    Debug.WriteLine($"EstatisticaController.Index: Aplicado filtro estadio={estadio}, Resultados={partidas.Count}");
                 }
 
                 var model = new EstatisticaViewModel
@@ -90,7 +96,7 @@ namespace gerenciamento_de_campeonato.Controllers
                     LigaId = ligaId,
                     Classificacao = _ligaService.GetClassificacao(ligaId) ?? new List<Tabela>(),
                     Artilheiros = _ligaService.GetArtilheiros(ligaId) ?? new List<ArtilheiroViewModel>(),
-                    Partidas = _context.Partidas.Where(p => p.LigaId == ligaId).OrderBy(p => p.Rodada).ToList() ?? new List<Partida>()
+                    Partidas = partidas
                 };
 
                 Debug.WriteLine($"EstatisticaController.Index: LigaId={ligaId}, Classificacao.Count={model.Classificacao?.Count ?? 0}, Artilheiros.Count={model.Artilheiros?.Count ?? 0}, Partidas.Count={model.Partidas?.Count ?? 0}");
@@ -104,6 +110,11 @@ namespace gerenciamento_de_campeonato.Controllers
                 if (!model.Classificacao.Any())
                 {
                     ViewBag.InfoMessage = "A simulação ainda não foi iniciada para esta liga. Clique em 'Iniciar Simulação' na página inicial.";
+                }
+
+                else if (!model.Partidas.Any() && (!string.IsNullOrEmpty(partidaId) || !string.IsNullOrEmpty(estadio) && estadio != "All"))
+                {
+                    ViewBag.InfoMessage = "Nenhuma partida encontrada para os filtros aplicados.";
                 }
 
                 return View(model);

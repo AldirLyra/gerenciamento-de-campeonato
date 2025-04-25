@@ -60,6 +60,14 @@
         .accordion-button {
             background-color: #e9ecef;
         }
+
+        .alert {
+            margin-bottom: 1rem;
+        }
+
+        .filter-form {
+            margin-bottom: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -70,128 +78,192 @@
         <h1>Estatísticas - Liga Tabajara</h1>
     </div>
     <div class="container">
-        <h2>Tabela de Classificação</h2>
+        @* Bloco: Mensagens de Erro e Info *@
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+        @if (ViewBag.InfoMessage != null)
+        {
+            <div class="alert alert-info" role="alert">
+                @ViewBag.InfoMessage
+            </div>
+        }
 
-        <p>
-            @using (Html.BeginForm("Index", "Estatistica", new { ligaId = Model.LigaId }, FormMethod.Get))
-            {
-                <div class="filter-form">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="jogos" class="form-label">Jogos Disputados</label>
-                            @Html.TextBox("jogos", null, new { @class = "form-control", type = "number", min = "0", max = "38", placeholder = "Ex.: 38" })
-                        </div>
-                        <div class="col-md-6">
-                            <label for="estadio" class="form-label">Estádio</label>
-                            @Html.DropDownList("estadio", ViewBag.estadio as SelectList, "All", new { @class = "form-select" })
-                        </div>
-                        <div class="col-md-12 mt-3">
-                            <input type="submit" value="Filtrar" class="btn btn-secondary" />
-                        </div>
-                    </div>
-                </div>
-            }
-        </p>
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Pontos</th>
-                    <th>Jogos</th>
-                    <th>Vitórias</th>
-                    <th>Empates</th>
-                    <th>Derrotas</th>
-                    <th>Gols Pró</th>
-                    <th>Gols Contra</th>
-                    <th>Saldo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Classificacao)
+        @* Bloco: Filtros para Partidas *@
+        @if (Model != null)
+        {
+            <h2>Filtros de Partidas</h2>
+            <p>
+                @using (Html.BeginForm("Index", "Estatistica", new { ligaId = Model.LigaId }, FormMethod.Get))
                 {
-                    <tr>
-                        <td>@item.Time.Nome</td>
-                        <td>@item.Pontos</td>
-                        <td>@item.Jogos</td>
-                        <td>@item.Vitorias</td>
-                        <td>@item.Empates</td>
-                        <td>@item.Derrotas</td>
-                        <td>@item.GolsPro</td>
-                        <td>@item.GolsContra</td>
-                        <td>@(item.GolsPro - item.GolsContra)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <h2>Artilheiros</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Jogador</th>
-                    <th>Time</th>
-                    <th>Gols</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var artilheiro in Model.Artilheiros.Take(10))
-                {
-                    <tr>
-                        <td>@artilheiro.NomeJogador</td>
-                        <td>@artilheiro.Time</td>
-                        <td>@artilheiro.Gols</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <h2>Resultados das Partidas</h2>
-        <div class="accordion" id="partidasAccordion">
-            @for (int rodada = 1; rodada <= 38; rodada++)
-            {
-                var partidasRodada = Model.Partidas.Where(p => p.Rodada == rodada).ToList();
-                if (partidasRodada.Any())
-                {
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingRodada@(rodada)">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRodada@(rodada)" aria-expanded="false" aria-controls="collapseRodada@(rodada)">
-                                Rodada @(rodada)
-                            </button>
-                        </h2>
-                        <div id="collapseRodada@(rodada)" class="accordion-collapse collapse" aria-labelledby="headingRodada@(rodada)" data-bs-parent="#partidasAccordion">
-                            <div class="accordion-body">
-                                @foreach (var partida in partidasRodada)
-                                {
-                                    <div class="card mb-2">
-                                        <div class="card-body">
-                                            <h5 class="card-title">@partida.TimeCasa.Nome @partida.GolsTimeCasa x @partida.GolsTimeVisitante @partida.TimeVisitante.Nome</h5>
-                                            <p class="card-text"><strong>Data:</strong> @partida.DataPartida.ToString("dd/MM/yyyy") | <strong>Estádio:</strong> @partida.TimeCasa.Estadio</p>
-                                            @if (partida.Gols.Any())
-                                            {
-                                                <p class="card-text"><strong>Gols:</strong></p>
-                                                <ul>
-                                                    @foreach (var gol in partida.Gols)
-                                                    {
-                                                        <li>@gol.Jogador.Nome (@gol.Minuto' - @gol.Jogador.Time.Nome)</li>
-                                                    }
-                                                </ul>
-                                            }
-                                            else
-                                            {
-                                                <p class="card-text">Nenhum gol registrado.</p>
-                                            }
-                                        </div>
-                                    </div>
-                                }
+                    <div class="filter-form">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="partidaId" class="form-label">ID da Partida</label>
+                                @Html.TextBox("partidaId", null, new { @class = "form-control", type = "number", min = "1", placeholder = "Ex.: 123" })
+                            </div>
+                            <div class="col-md-6">
+                                <label for="estadio" class="form-label">Estádio</label>
+                                @Html.DropDownList("estadio", ViewBag.estadio as SelectList, new { @class = "form-select" })
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <input type="submit" value="Filtrar" class="btn btn-secondary" />
                             </div>
                         </div>
                     </div>
                 }
-            }
-        </div>
+            </p>
+        }
+
+        @* Bloco: Tabela de Classificação *@
+        @if (Model != null && Model.Classificacao != null && Model.Classificacao.Any())
+        {
+            <h2>Tabela de Classificação</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Pontos</th>
+                        <th>Jogos</th>
+                        <th>Vitórias</th>
+                        <th>Empates</th>
+                        <th>Derrotas</th>
+                        <th>Gols Pró</th>
+                        <th>Gols Contra</th>
+                        <th>Saldo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Classificacao)
+                    {
+                        <tr>
+                            <td>@(item.Time?.Nome ?? "Desconhecido")</td>
+                            <td>@item.Pontos</td>
+                            <td>@item.Jogos</td>
+                            <td>@item.Vitorias</td>
+                            <td>@item.Empates</td>
+                            <td>@item.Derrotas</td>
+                            <td>@item.GolsPro</td>
+                            <td>@item.GolsContra</td>
+                            <td>@(item.GolsPro - item.GolsContra)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h2>Tabela de Classificação</h2>
+            <p class="text-muted">Nenhuma classificação disponível. Inicie a simulação.</p>
+        }
+
+        @* Bloco: Lista de Artilheiros *@
+        @if (Model != null && Model.Artilheiros != null && Model.Artilheiros.Any())
+        {
+            <h2>Artilheiros</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Jogador</th>
+                        <th>Time</th>
+                        <th>Gols</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var artilheiro in Model.Artilheiros.Take(10))
+                    {
+                        <tr>
+                            <td>@artilheiro.NomeJogador</td>
+                            <td>@artilheiro.Time</td>
+                            <td>@artilheiro.Gols</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <h2>Artilheiros</h2>
+            <p class="text-muted">Nenhum artilheiro registrado.</p>
+        }
+
+        @* Bloco: Resultados das Partidas *@
+        @if (Model != null && Model.Partidas != null && Model.Partidas.Any())
+        {
+            <h2>Resultados das Partidas</h2>
+            <div class="accordion" id="partidasAccordion">
+                @foreach (var rodada in Model.Partidas.Select(p => p.Rodada).Distinct().OrderBy(r => r))
+                {
+                    var partidasRodada = Model.Partidas.Where(p => p.Rodada == rodada).ToList();
+                    if (partidasRodada.Any())
+                    {
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingRodada@(rodada)">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRodada@(rodada)" aria-expanded="false" aria-controls="collapseRodada@(rodada)">
+                                    Rodada @(rodada)
+                                </button>
+                            </h2>
+                            <div id="collapseRodada@(rodada)" class="accordion-collapse collapse" aria-labelledby="headingRodada@(rodada)" data-bs-parent="#partidasAccordion">
+                                <div class="accordion-body">
+                                    @foreach (var partida in partidasRodada)
+                                    {
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <h5 class="card-title">@(partida.TimeCasa?.Nome ?? "Desconhecido") (@partida.GolsTimeVisitante x @partida.GolsTimeCasa) @(partida.TimeVisitante?.Nome ?? "Desconhecido")</h5>
+                                                <p class="card-text">
+                                                    <strong>ID da Partida:</strong> @partida.Id |
+                                                    <strong>Data:</strong> @partida.DataPartida.ToString("dd/MM/yyyy") |
+                                                    <strong>Estádio:</strong> @(partida.TimeCasa?.Estadio ?? "Desconhecido")
+                                                </p>
+                                                @if (partida.Gols != null && partida.Gols.Any())
+                                                {
+                                                    <p class="card-text"><strong>Gols:</strong></p>
+                                                    <ul>
+                                                        @foreach (var gol in partida.Gols)
+                                                        {
+                                                            <li>@(gol.Jogador?.Nome ?? "Desconhecido") (@gol.Minuto' - @(gol.Jogador?.Time?.Nome ?? "Desconhecido"))</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <p class="text-muted">Nenhum gol registrado.</p>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <h2>Resultados das Partidas</h2>
+            <p class="text-muted">Nenhuma partida registrada.</p>
+        }
+
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('.accordion-button').on('click', function () {
+                var target = $(this).data('bs-target');
+                if ($(target).hasClass('show')) {
+                    $(target).collapse('hide');
+                } else {
+                    $(target).collapse('show');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
